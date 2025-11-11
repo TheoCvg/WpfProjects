@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="Snake.mvvm.views.GameFieldView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewmodels="clr-namespace:Snake.mvvm.viewmodels"
+             xmlns:local="clr-namespace:Snake.mvvm.views"
+             xmlns:behaviors="clr-namespace:Snake.behaviors"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type={x:Type viewmodels:MainWindowViewmodel}, IsDesignTimeCreatable=False}"
+             d:Background="WhiteSmoke"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <Grid  x:Name="GameArea"
+           Focusable="True"
+           behaviors:KeyUpBehavior.Command="{Binding GameFiledViewmodel.KeyUpCommand}">
+        <ItemsControl ItemsSource="{Binding GameFiledViewmodel.GameObjects }">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left"
+                            Value="{Binding Position.X}" />
+                    <Setter Property="Canvas.Top"
+                            Value="{Binding Position.Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <ItemsControl.Resources>
+                <!-- Template du Snake -->
+                <DataTemplate DataType="{x:Type viewmodels:SnakeViewmodel}">
+                    <ItemsControl ItemsSource="{Binding SnakeParts}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Canvas.Left"
+                                        Value="{Binding Position.X}" />
+                                <Setter Property="Canvas.Top"
+                                        Value="{Binding Position.Y}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Rectangle Width="10"
+                                           Height="10">
+                                    <Rectangle.Fill>
+                                        <SolidColorBrush Color="{Binding Color}" />
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+
+                <!--Template pour d’autres objets-->
+                <DataTemplate DataType="{x:Type viewmodels:FoodViewmodel}">
+                    <Ellipse Width="10"
+                             Height="10"
+                             Fill="Red" />
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
+    </Grid>
+</UserControl>
